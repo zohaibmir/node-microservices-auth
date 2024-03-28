@@ -74,7 +74,7 @@ http.createServer((req, res) => {
 }).listen(3003);
 
 app.listen(PORT, () => {
-    debug(`Server is started on port ${PORT}`)
+    debug(`Edge gatway is running  on http://localhost:${PORT}`);
 });
 
 // const server = http.createServer(app);
