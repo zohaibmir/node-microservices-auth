@@ -5,6 +5,10 @@ const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const httpProxy = require('http-proxy');
 const debug = require('debug')('app');
+//Adding Router Services
+const userService = require('./src/routers/userRouter');
+const productService = require('./src/routers/productRouter');
+const orderService = require('./src/routers/orderRouter');
 
 //Create Express Project
 const app = express();
@@ -24,6 +28,11 @@ app.use(limiter);
 
 //Loging middleware
 app.use(morgan('combined'));
+
+//Use path base routing
+app.use('/users', userService);
+app.use('/products', productService);
+app.use('/orders', orderService);
 
 app.get('/', (request, response) => {
     response.send('Welcome to the gateway');
@@ -47,7 +56,6 @@ app.use('/service*', (req, res) => {
     proxy.web(req, res, {target: selectedService.target + url});
 });
 
-
 http.createServer((req, res) => {
     res.end('Service 1 responds');
 }).listen(3001);
@@ -66,5 +74,5 @@ http.createServer((req, res) => {
 
 const server = http.createServer(app);
 server.listen(PORT, () => {
-   console.log(`Edge gatway is running  on http://localhost:${PORT}`);
+    console.log(`Edge gatway is running  on http://localhost:${PORT}`);
 });
