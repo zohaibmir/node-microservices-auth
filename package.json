@@ -1,0 +1,40 @@
+{
+  "name": "microservices-auth",
+  "version": "1.0.0",
+  "description": " API Gateways to create edge services that are secure, dependable, and high-performing.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=app,app:* nodemon app.js ",
+    "debug": "DEBUG=* nodemon app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zohaibmir/node-microservices-auth.git"
+  },
+  "keywords": [
+    "Node",
+    "Js",
+    "Microservices",
+    "Rest"
+  ],
+  "author": "Zohaib Mir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zohaibmir/node-microservices-auth/issues"
+  },
+  "homepage": "https://github.com/zohaibmir/node-microservices-auth#readme",
+  "dependencies": {
+    "debug": "^2.6.9",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "delay": 2500,
+    "env": {
+      "PORT": 8080
+    }
+  }
+}
