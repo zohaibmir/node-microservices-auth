@@ -39,10 +39,31 @@ app.use('/orders', orderService);
 logRequestMiddlware = require('./src/middlewares/logRequest')
 app.use(logRequestMiddlware);
 
+//Session Midleware
+sessionMiddlware = require('./src/middlewares/session-based-auth')
+app.use(sessionMiddlware.session);
+
 app.get('/', (request, response) => {
     response.send('Welcome to the gateway');
     response.end();
 })
+
+app.get('/login', (req, res) => {
+    const {authenticated} = req.session;
+
+    if (!authenticated) {
+        req.session.authenticated = true;
+        res.send('Successfully authenticated');
+    } else {
+        res.send('Already authenticated');
+    }
+});
+
+app.get('/logout', sessionMiddlware.protect, (req, res) => {
+    req.session.destroy(() => {
+        res.send('Successfully logged out');
+    });
+});
 
 //Create a proxy to handle load balancing
 const proxy = httpProxy.createProxyServer();
