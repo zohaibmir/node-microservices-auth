@@ -65,6 +65,11 @@ app.get('/logout', sessionMiddlware.protect, (req, res) => {
     });
 });
 
+app.get('/protected', sessionMiddlware.protect, (req, res) => {
+    const {name = "user"} = req.query;
+    res.send(`Hello from protected service ${name}`);
+})
+
 //Create a proxy to handle load balancing
 const proxy = httpProxy.createProxyServer();
 
