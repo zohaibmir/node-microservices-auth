@@ -25,6 +25,7 @@ const limiter = rateLimit(
 
 // apply rate limit to all requests
 app.use(limiter);
+//we can also apply limited to specific path app.use('/limited', limiter);
 
 //Loging middleware
 app.use(morgan('combined'));
@@ -33,6 +34,10 @@ app.use(morgan('combined'));
 app.use('/users', userService);
 app.use('/products', productService);
 app.use('/orders', orderService);
+
+//Custom Logging Midleware
+logRequestMiddlware = require('./src/middlewares/logRequest')
+app.use(logRequestMiddlware);
 
 app.get('/', (request, response) => {
     response.send('Welcome to the gateway');
@@ -68,11 +73,11 @@ http.createServer((req, res) => {
     res.end('Service 3 responds');
 }).listen(3003);
 
-// app.listen(PORT, () => {
-//     debug(`Server is started on port ${PORT}`)
-// });
-
-const server = http.createServer(app);
-server.listen(PORT, () => {
-    console.log(`Edge gatway is running  on http://localhost:${PORT}`);
+app.listen(PORT, () => {
+    debug(`Server is started on port ${PORT}`)
 });
+
+// const server = http.createServer(app);
+// server.listen(PORT, () => {
+//     debug(`Edge gatway is running  on http://localhost:${PORT}`);
+// });
