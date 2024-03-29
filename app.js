@@ -40,8 +40,15 @@ logRequestMiddlware = require('./src/middlewares/logRequest')
 app.use(logRequestMiddlware);
 
 //Session Midleware
-sessionMiddlware = require('./src/middlewares/session-based-auth')
+sessionMiddlware = require('./src/auth/session-based-access')
 app.use(sessionMiddlware.session);
+
+//Role Based Access
+const auth = require('./src/auth/role-base-access');
+const {roles} = require("./src/auth/role-base-access");
+const adminRole = auth.roles.admin;
+const token = auth.generateToken(adminRole);
+debug('Generated Token: ' + token);
 
 app.get('/', (request, response) => {
     response.send('Welcome to the gateway');
@@ -69,6 +76,16 @@ app.get('/protected', sessionMiddlware.protect, (req, res) => {
     const {name = "user"} = req.query;
     res.send(`Hello from protected service ${name}`);
 })
+
+//Role based access Routes
+app.get('/public', (req, res) => {
+    res.json({message: 'Public route'});
+});
+
+app.get('/admin', auth.authenticateUser(roles.admin), (req, res) => {
+    res.json({message: 'Admmin Route'});
+    //we can access the admin route with curl command curl -H "Authorization: token" url
+});
 
 //Create a proxy to handle load balancing
 const proxy = httpProxy.createProxyServer();

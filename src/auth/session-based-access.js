@@ -20,7 +20,7 @@ const protect = (req, res, next) => {
     const {authenticated} = req.session;
     if (!authenticated) {
         debug('401 /n');
-        res.sendStatus(401 );
+        res.sendStatus(401);
     } else {
         debug('Authenticated!')
         next();
