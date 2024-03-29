@@ -37,20 +37,27 @@ app.use('/products', productService);
 app.use('/orders', orderService);
 
 //Custom Logging Midleware
-logRequestMiddlware = require('./src/middlewares/logRequest')
+logRequestMiddlware = require('./src/middlewares/log/logRequest')
 app.use(logRequestMiddlware);
 
 //Session Midleware
-sessionMiddlware = require('./src/auth/session-based-access')
+sessionMiddlware = require('./src/middlewares/auth/session-based-access')
 app.use(sessionMiddlware.session);
 
 //Role Based Access
-const auth = require('./src/auth/role-base-access');
-const {roles} = require("./src/auth/role-base-access");
+const auth = require('./src/middlewares/auth/role-base-access');
+const {roles} = require("./src/middlewares/auth/role-base-access");
 const adminRole = auth.roles.admin;
 const token = auth.generateToken(adminRole);
 debug('Generated Token: ' + token);
 
+
+//Use Cache Middlware
+
+let cache = require('./src/middlewares/cache/api-cache');
+
+//Cache all routes
+//app.use(cache('1 minute'));
 app.get('/', (request, response) => {
     response.send('Welcome to the gateway');
     response.end();
@@ -79,7 +86,7 @@ app.get('/protected', sessionMiddlware.protect, (req, res) => {
 })
 
 //Role based access Routes
-app.get('/public', (req, res) => {
+app.get('/public', cache('2 minutes'), (req, res) => {
     res.json({message: 'Public route'});
 });
 
