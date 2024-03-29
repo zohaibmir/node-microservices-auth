@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const httpProxy = require('http-proxy');
 const debug = require('debug')('app');
+const cors = require('cors');
 //Adding Router Services
 const userService = require('./src/routers/userRouter');
 const productService = require('./src/routers/productRouter');
