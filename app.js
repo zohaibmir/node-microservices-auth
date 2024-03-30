@@ -40,6 +40,9 @@ app.use('/orders', orderService);
 logRequestMiddlware = require('./src/middlewares/log/logRequest')
 app.use(logRequestMiddlware);
 
+//Winston Logger
+const winstonLogger = require('./src/middlewares/log/winstonLogger');
+app.use(winstonLogger.middleware);
 //Session Midleware
 sessionMiddlware = require('./src/middlewares/auth/session-based-access')
 app.use(sessionMiddlware.session);
@@ -51,7 +54,6 @@ const adminRole = auth.roles.admin;
 const token = auth.generateToken(adminRole);
 debug('Generated Token: ' + token);
 
-
 //Use Cache Middlware
 
 let cache = require('./src/middlewares/cache/api-cache');
@@ -59,6 +61,7 @@ let cache = require('./src/middlewares/cache/api-cache');
 //Cache all routes
 //app.use(cache('1 minute'));
 app.get('/', (request, response) => {
+    winstonLogger.info('Hello forom root endpoint');
     response.send('Welcome to the gateway');
     response.end();
 })
@@ -124,9 +127,9 @@ http.createServer((req, res) => {
     res.end('Service 3 responds');
 }).listen(3003);
 
-
 //Run the Parallel Tasks
 const parallelism = require('./src/middlewares/parallelism');
+const {loggers} = require("winston");
 //parallelism();
 app.listen(PORT, () => {
     debug(`Edge gatway is running  on http://localhost:${PORT}`);
