@@ -124,6 +124,10 @@ http.createServer((req, res) => {
     res.end('Service 3 responds');
 }).listen(3003);
 
+
+//Run the Parallel Tasks
+const parallelism = require('./src/middlewares/parallelism');
+//parallelism();
 app.listen(PORT, () => {
     debug(`Edge gatway is running  on http://localhost:${PORT}`);
 });
